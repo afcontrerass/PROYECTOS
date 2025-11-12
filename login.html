@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Iniciar Sesión - EduTask</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .auth-container {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #f5f7fa, #c3cfe2);
+            padding: 20px;
+        }
+        
+        .auth-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+            width: 100%;
+            max-width: 450px;
+        }
+        
+        .auth-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .auth-logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .auth-logo h1 {
+            font-size: 28px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .auth-header h2 {
+            font-size: 24px;
+            color: var(--dark);
+            margin-bottom: 10px;
+        }
+        
+        .auth-header p {
+            color: var(--gray);
+            margin-bottom: 0;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--dark);
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+        
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
+        }
+        
+        .password-input {
+            position: relative;
+        }
+        
+        .toggle-password {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: var(--gray);
+            cursor: pointer;
+        }
+        
+        .auth-options {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+        
+        .remember-me {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .remember-me input {
+            width: 16px;
+            height: 16px;
+        }
+        
+        .forgot-password {
+            color: var(--primary);
+            text-decoration: none;
+            font-size: 14px;
+        }
+        
+        .forgot-password:hover {
+            text-decoration: underline;
+        }
+        
+        .btn-auth {
+            width: 100%;
+            padding: 15px;
+            border-radius: 10px;
+            border: none;
+            font-weight: 600;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            box-shadow: 0 5px 15px rgba(67, 97, 238, 0.4);
+            transform: translateY(-2px);
+        }
+        
+        .auth-divider {
+            text-align: center;
+            margin: 25px 0;
+            position: relative;
+        }
+        
+        .auth-divider::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: #e2e8f0;
+        }
+        
+        .auth-divider span {
+            background: white;
+            padding: 0 15px;
+            color: var(--gray);
+            font-size: 14px;
+        }
+        
+        .social-auth {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+        
+        .btn-social {
+            padding: 12px;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            background: white;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+            font-weight: 600;
+        }
+        
+        .btn-social:hover {
+            border-color: var(--primary);
+            background: rgba(67, 97, 238, 0.05);
+        }
+        
+        .auth-footer {
+            text-align: center;
+            margin-top: 25px;
+        }
+        
+        .auth-footer a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+        }
+        
+        .auth-footer a:hover {
+            text-decoration: underline;
+        }
+        
+        .alert {
+            padding: 12px 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            font-size: 14px;
+            display: none;
+        }
+        
+        .alert-error {
+            background: rgba(239, 71, 111, 0.1);
+            border: 1px solid rgba(239, 71, 111, 0.2);
+            color: var(--danger);
+        }
+        
+        .alert-success {
+            background: rgba(76, 201, 240, 0.1);
+            border: 1px solid rgba(76, 201, 240, 0.2);
+            color: var(--success);
+        }
+        
+        @media (max-width: 480px) {
+            .auth-card {
+                padding: 30px 20px;
+            }
+            
+            .social-auth {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="auth-container">
+        <div class="auth-card">
+            <div class="auth-header">
+                <div class="auth-logo">
+                    <i class="fas fa-tasks" style="font-size: 32px; color: var(--primary);"></i>
+                    <h1>PROJECT MANAGEMENT</h1>
+                </div>
+                <h2>Iniciar Sesión</h2>
+                <p>Accede a tu cuenta para gestionar tus tareas</p>
+            </div>
+            
+            <div class="alert alert-error" id="errorAlert">
+                <i class="fas fa-exclamation-circle"></i>
+                <span id="errorMessage">Credenciales incorrectas. Inténtalo de nuevo.</span>
+            </div>
+            
+            <div class="alert alert-success" id="successAlert">
+                <i class="fas fa-check-circle"></i>
+                <span id="successMessage">Registro exitoso. Ahora puedes iniciar sesión.</span>
+            </div>
+            
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="loginEmail">Correo Electrónico</label>
+                    <input type="email" class="form-control" id="loginEmail" placeholder="tu@email.com" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="loginPassword">Contraseña</label>
+                    <div class="password-input">
+                        <input type="password" class="form-control" id="loginPassword" placeholder="Tu contraseña" required>
+                        <button type="button" class="toggle-password" id="toggleLoginPassword">
+                            <i class="far fa-eye"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="auth-options">
+                    <div class="remember-me">
+                        <input type="checkbox" id="rememberMe" name="rememberMe">
+                        <label for="rememberMe">Recordarme</label>
+                    </div>
+                    <a href="#" class="forgot-password">¿Olvidaste tu contraseña?</a>
+                </div>
+                
+                <button type="submit" class="btn-auth btn-primary" id="loginSubmit">
+                    <i class="fas fa-sign-in-alt"></i>
+                    Iniciar Sesión
+                </button>
+            </form>
+            
+            <div class="auth-divider">
+                <span>O continuar con</span>
+            </div>
+            
+            <div class="social-auth">
+                <button type="button" class="btn-social">
+                    <i class="fab fa-google" style="color: #DB4437;"></i>
+                    Google
+                </button>
+                <button type="button" class="btn-social">
+                    <i class="fab fa-microsoft" style="color: #0078D4;"></i>
+                    Microsoft
+                </button>
+            </div>
+            
+            <div class="auth-footer">
+                <p>¿No tienes una cuenta? <a href="register.html">Regístrate aquí</a></p>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const loginForm = document.getElementById('loginForm');
+            const errorAlert = document.getElementById('errorAlert');
+            const successAlert = document.getElementById('successAlert');
+            const togglePasswordBtn = document.getElementById('toggleLoginPassword');
+            const passwordInput = document.getElementById('loginPassword');
+            
+            // Mostrar alerta de éxito si viene del registro
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('registered') === 'true') {
+                successAlert.style.display = 'flex';
+                successAlert.style.alignItems = 'center';
+                successAlert.style.gap = '10px';
+            }
+            
+            // Alternar visibilidad de contraseña
+            togglePasswordBtn.addEventListener('click', () => {
+                const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+                passwordInput.setAttribute('type', type);
+                togglePasswordBtn.innerHTML = type === 'password' ? '<i class="far fa-eye"></i>' : '<i class="far fa-eye-slash"></i>';
+            });
+            
+            // Manejar envío del formulario
+            loginForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                
+                const submitBtn = document.getElementById('loginSubmit');
+                const originalText = submitBtn.innerHTML;
+                
+                // Mostrar loading
+                submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Validando...';
+                submitBtn.disabled = true;
+                
+                const email = document.getElementById('loginEmail').value.trim();
+                const password = document.getElementById('loginPassword').value;
+                
+                // Validaciones básicas
+                if (!email || !password) {
+                    showError('Por favor, completa todos los campos');
+                    resetButton(submitBtn, originalText);
+                    return;
+                }
+                
+                try {
+                    const response = await fetch('/login', {
+                        method: 'POST',
+                        credentials: 'include',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ email, password })
+                    });
+
+                    if (response.ok) {
+                        const data = await response.json();
+                        // Redirección según lo que devuelva el backend
+                        if (data && data.redirect) {
+                            window.location.href = data.redirect;
+                        } else if (data && data.role) {
+                            // Fallback por rol si no hay redirect explícito
+                            redirectUserByRole({ role: data.role });
+                        } else {
+                            // Por defecto a index
+                            window.location.href = '/index.html';
+                        }
+                    } else {
+                        const errorData = await response.json().catch(() => ({}));
+                        showError(errorData.message || 'Error al iniciar sesión');
+                    }
+
+                } catch (error) {
+                    console.error('Error de conexión:', error);
+                    showError('Error de conexión. Verifica tu internet e inténtalo de nuevo.');
+                } finally {
+                    resetButton(submitBtn, originalText);
+                }
+            });
+            
+            async function redirectUserByRole(user) {
+                const role = (user.role || '').toLowerCase();
+                
+                // Verificar que el usuario tenga un rol válido
+                if (!role) {
+                    showError('Usuario sin rol asignado. Contacta al administrador.');
+                    return;
+                }
+                
+                // Redirección basada en el rol
+                if (role.includes('docente') || role.includes('teacher') || role.includes('profesor') || role.includes('admin')) {
+                    window.location.href = '/indexdocente.html';
+                } else if (role.includes('estudiante') || role.includes('student') || role.includes('alumno')) {
+                    window.location.href = '/indexestudiante.html';
+                } else {
+                    // Rol no reconocido - redirigir a página por defecto
+                    console.warn('Rol no reconocido:', role);
+                    window.location.href = '/index.html';
+                }
+            }
+            
+            function resetButton(button, originalHtml) {
+                button.innerHTML = originalHtml;
+                button.disabled = false;
+            }
+            
+            function showError(message) {
+                errorAlert.style.display = 'flex';
+                errorAlert.style.alignItems = 'center';
+                errorAlert.style.gap = '10px';
+                document.getElementById('errorMessage').textContent = message;
+                
+                // Ocultar después de 5 segundos
+                setTimeout(() => {
+                    errorAlert.style.display = 'none';
+                }, 5000);
+            }
+        });
+    </script>
+</body>
+</html>

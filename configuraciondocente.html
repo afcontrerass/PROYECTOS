@@ -1,0 +1,1152 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Configuración - EduTask</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .config-tabs {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+        }
+        
+        .tab-buttons {
+            display: flex;
+            background: #f8f9fa;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        
+        .tab-btn {
+            padding: 15px 25px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+        
+        .tab-btn.active {
+            background: white;
+            border-bottom: 2px solid var(--primary);
+            color: var(--primary);
+        }
+        
+        .tab-content {
+            padding: 0;
+        }
+        
+        .tab-pane {
+            display: none;
+            padding: 30px;
+        }
+        
+        .tab-pane.active {
+            display: block;
+        }
+        
+        .config-section {
+            margin-bottom: 30px;
+        }
+        
+        .config-section h3 {
+            margin-bottom: 20px;
+            color: var(--dark);
+            border-bottom: 2px solid var(--primary);
+            padding-bottom: 10px;
+        }
+        
+        .config-form {
+            max-width: 600px;
+        }
+        
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--dark);
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 10px 15px;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+        
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.1);
+        }
+        
+        textarea.form-control {
+            resize: vertical;
+            min-height: 100px;
+        }
+        
+        .avatar-upload {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            margin-top: 10px;
+        }
+        
+        .avatar-preview {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 24px;
+            overflow: hidden;
+        }
+        
+        .avatar-preview img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .avatar-upload-controls {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: var(--primary-dark);
+        }
+        
+        .btn-secondary {
+            background: var(--secondary);
+            color: white;
+        }
+        
+        .btn-outline {
+            background: transparent;
+            border: 1px solid #e2e8f0;
+            color: var(--dark);
+        }
+        
+        .btn-outline:hover {
+            background: #f8f9fa;
+        }
+        
+        .form-actions {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+        }
+        
+        .setting-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        
+        .setting-info {
+            flex: 1;
+        }
+        
+        .setting-info h4 {
+            margin-bottom: 5px;
+            color: var(--dark);
+        }
+        
+        .setting-info p {
+            color: var(--gray);
+            font-size: 14px;
+            margin: 0;
+        }
+        
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 34px;
+        }
+        
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 34px;
+        }
+        
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 26px;
+            width: 26px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+        
+        input:checked + .slider {
+            background-color: var(--primary);
+        }
+        
+        input:checked + .slider:before {
+            transform: translateX(26px);
+        }
+        
+        .password-strength {
+            margin-top: 10px;
+        }
+        
+        .strength-bar {
+            height: 6px;
+            background: #e2e8f0;
+            border-radius: 3px;
+            overflow: hidden;
+            margin-bottom: 5px;
+        }
+        
+        .strength-fill {
+            height: 100%;
+            width: 0%;
+            transition: all 0.3s;
+            border-radius: 3px;
+        }
+        
+        .strength-text {
+            font-size: 12px;
+            color: var(--gray);
+        }
+        
+        .session-info {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 15px;
+        }
+        
+        .session-details p {
+            margin: 5px 0;
+            font-size: 14px;
+        }
+        
+        .theme-selector, .density-selector {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .theme-option, .density-option {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            padding: 10px;
+            border-radius: 8px;
+            border: 2px solid transparent;
+            transition: all 0.3s;
+        }
+        
+        .theme-option.active, .density-option.active {
+            border-color: var(--primary);
+            background: rgba(67, 97, 238, 0.05);
+        }
+        
+        .theme-preview {
+            width: 60px;
+            height: 40px;
+            border-radius: 6px;
+            border: 2px solid #e2e8f0;
+        }
+        
+        .light-theme {
+            background: linear-gradient(135deg, #ffffff 50%, #f8f9fa 50%);
+        }
+        
+        .dark-theme {
+            background: linear-gradient(135deg, #2d3748 50%, #4a5568 50%);
+        }
+        
+        .auto-theme {
+            background: linear-gradient(135deg, #ffffff 33%, #e2e8f0 33%, #e2e8f0 66%, #2d3748 66%);
+        }
+        
+        .message {
+            padding: 10px 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+            font-size: 14px;
+            display: none;
+        }
+        
+        .message.success {
+            background: rgba(76, 175, 80, 0.1);
+            color: #2e7d32;
+            border: 1px solid rgba(76, 175, 80, 0.2);
+        }
+        
+        .message.error {
+            background: rgba(239, 71, 111, 0.1);
+            color: #d32f2f;
+            border: 1px solid rgba(239, 71, 111, 0.2);
+        }
+        
+        @media (max-width: 768px) {
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+            
+            .avatar-upload {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .form-actions {
+                flex-direction: column;
+            }
+            
+            .setting-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+            
+            .theme-selector, .density-selector {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">
+                <a href="indexdocente.html" style="display:flex;align-items:center;gap:12px;text-decoration:none;color:inherit">
+                    <img src="logo.png" alt="Logo" style="height:40px;object-fit:contain">
+                    <h1 style="font-size:20px;margin:0">PROJECT MANAGEMENT</h1>
+                </a>
+            </div>
+            
+            <div class="user-actions">
+                <div class="notification-bell" id="notificationBell">
+                    <i class="far fa-bell"></i>
+                    <span class="notification-count">3</span>
+                    
+                    <div class="notification-panel" id="notificationPanel">
+                        <div class="notification-header">
+                            <h3>Notificaciones</h3>
+                            <span class="mark-all-read">Marcar todo como leído</span>
+                        </div>
+                        <div class="notification-list">
+                            <div class="notification-item unread">
+                                <div class="notification-icon icon-info">
+                                    <i class="fas fa-info-circle"></i>
+                                </div>
+                                <div class="notification-content">
+                                    <div class="notification-title">Nueva tarea asignada</div>
+                                    <p>Matemáticas - Ejercicios de álgebra</p>
+                                    <div class="notification-time">Hace 2 horas</div>
+                                </div>
+                            </div>
+                            <div class="notification-item unread">
+                                <div class="notification-icon icon-warning">
+                                    <i class="fas fa-exclamation-triangle"></i>
+                                </div>
+                                <div class="notification-content">
+                                    <div class="notification-title">Tarea próxima a vencer</div>
+                                    <p>Historia - Ensayo sobre la revolución</p>
+                                    <div class="notification-time">Ayer</div>
+                                </div>
+                            </div>
+                            <div class="notification-item">
+                                <div class="notification-icon icon-urgent">
+                                    <i class="fas fa-fire"></i>
+                                </div>
+                                <div class="notification-content">
+                                    <div class="notification-title">Calificación publicada</div>
+                                    <p>Física - Examen parcial</p>
+                                    <div class="notification-time">Hace 3 días</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="user-profile">
+                    <div class="avatar" id="avatar">JP</div>
+                    <div class="user-info">
+                        <div class="user-name" id="userName">-</div>
+                        <div class="user-role" id="userRole">-</div>
+                        <button id="logoutBtn" style="margin-left:10px;padding:6px 10px;border-radius:6px;">Cerrar sesión</button>
+                    </div>
+                </div>
+            </div>
+        </header>
+        
+        <div class="main-content">
+            <div class="sidebar">
+                <ul class="sidebar-menu">
+                    <li>
+                        <a href="indexdocente.html">
+                            <i class="fas fa-home"></i>
+                            <span>inicio</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="proyectosdocente.html">
+                            <i class="fas fa-upload"></i>
+                            <span>proyectos</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="calendariodocente.html">
+                            <i class="fas fa-calendar-alt"></i>
+                            <span>calendario</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="calificacionesdocente.html">
+                            <i class="fas fa-chart-bar"></i>
+                            <span>calificaciones</span>
+                        </a>
+                    </li>
+                    <li class="active">
+                        <a href="configuraciondocente.html">
+                            <i class="fas fa-cog"></i>
+                            <span>Configuración</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            
+            <div class="content">
+                <div class="section-header">
+                    <h2>Configuración</h2>
+                </div>
+                
+                <div class="config-tabs">
+                    <div class="tab-buttons">
+                        <button class="tab-btn active" data-tab="perfil">Perfil</button>
+                        <button class="tab-btn" data-tab="notificaciones">Notificaciones</button>
+                        <button class="tab-btn" data-tab="seguridad">Seguridad</button>
+                        <button class="tab-btn" data-tab="preferencias">Preferencias</button>
+                    </div>
+                    
+                    <div class="tab-content">
+                        <!-- Pestaña Perfil -->
+                        <div class="tab-pane active" id="perfil">
+                            <div class="config-section">
+                                <h3>Información Personal</h3>
+                                <form class="config-form" id="profileForm">
+                                    <div class="form-row">
+                                        <div class="form-group">
+                                            <label for="nombre">Nombre</label>
+                                            <input type="text" class="form-control" id="nombre" name="nombre">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="apellido">Apellido</label>
+                                            <input type="text" class="form-control" id="apellido" name="apellido">
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label for="email">Correo Electrónico</label>
+                                        <input type="email" class="form-control" id="email" name="email">
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label for="telefono">Teléfono</label>
+                                        <input type="tel" class="form-control" id="telefono" name="telefono">
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label for="institucion">Institución</label>
+                                        <input type="text" class="form-control" id="institucion" name="institucion">
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label for="biografia">Biografía</label>
+                                        <textarea class="form-control" id="biografia" name="biografia" rows="4"></textarea>
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label>Foto de Perfil</label>
+                                        <div class="avatar-upload">
+                                            <div class="avatar-preview">
+                                                <div class="avatar-preview-img" id="avatarPreview">
+                                                    <span id="avatarInitials">JP</span>
+                                                </div>
+                                            </div>
+                                            <div class="avatar-upload-controls">
+                                                <button type="button" class="btn btn-secondary" id="changeAvatarBtn">
+                                                    <i class="fas fa-camera"></i>
+                                                    Cambiar Foto
+                                                </button>
+                                                <input type="file" id="avatarInput" accept="image/*" style="display: none;">
+                                                <button type="button" class="btn btn-outline" id="removeAvatarBtn">
+                                                    <i class="fas fa-trash"></i>
+                                                    Eliminar
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="form-actions">
+                                        <button type="submit" class="btn btn-primary" id="saveProfileBtn">
+                                            <i class="fas fa-save"></i>
+                                            Guardar Cambios
+                                        </button>
+                                        <button type="button" class="btn btn-outline" id="cancelProfileBtn">
+                                            Cancelar
+                                        </button>
+                                    </div>
+                                    <div class="message" id="profileMessage"></div>
+                                </form>
+                            </div>
+                        </div>
+                        
+                        <!-- Pestaña Notificaciones -->
+                        <div class="tab-pane" id="notificaciones">
+                            <div class="config-section">
+                                <h3>Preferencias de Notificación</h3>
+                                <p>Selecciona cómo y cuándo deseas recibir notificaciones sobre tus tareas y actividades.</p>
+                                
+                                <div class="notification-settings" id="notificationSettings">
+                                    <div class="setting-item">
+                                        <div class="setting-info">
+                                            <h4>Notificaciones por Email</h4>
+                                            <p>Recibe notificaciones por correo electrónico sobre nuevas tareas, recordatorios y calificaciones.</p>
+                                        </div>
+                                        <label class="switch">
+                                            <input type="checkbox" id="emailNotifications" name="email_notifications">
+                                            <span class="slider"></span>
+                                        </label>
+                                    </div>
+                                    
+                                    <div class="setting-item">
+                                        <div class="setting-info">
+                                            <h4>Notificaciones de Calificaciones</h4>
+                                            <p>Recibe notificaciones cuando se publiquen nuevas calificaciones.</p>
+                                        </div>
+                                        <label class="switch">
+                                            <input type="checkbox" id="gradeNotifications" name="grade_notifications">
+                                            <span class="slider"></span>
+                                        </label>
+                                    </div>
+                                    
+                                    <div class="setting-item">
+                                        <div class="setting-info">
+                                            <h4>Notificaciones de Proyectos</h4>
+                                            <p>Recibe actualizaciones sobre proyectos en los que participas.</p>
+                                        </div>
+                                        <label class="switch">
+                                            <input type="checkbox" id="projectNotifications" name="project_notifications">
+                                            <span class="slider"></span>
+                                        </label>
+                                    </div>
+                                    
+                                    <div class="setting-item">
+                                        <div class="setting-info">
+                                            <h4>Resumen Semanal</h4>
+                                            <p>Recibe un resumen semanal de tus actividades y tareas pendientes.</p>
+                                        </div>
+                                        <label class="switch">
+                                            <input type="checkbox" id="weeklySummary" name="weekly_summary">
+                                            <span class="slider"></span>
+                                        </label>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-actions">
+                                    <button type="button" class="btn btn-primary" id="saveNotificationsBtn">
+                                        <i class="fas fa-save"></i>
+                                        Guardar Preferencias
+                                    </button>
+                                </div>
+                                <div class="message" id="notificationsMessage"></div>
+                            </div>
+                        </div>
+                        
+                        <!-- Pestaña Seguridad -->
+                        <div class="tab-pane" id="seguridad">
+                            <div class="config-section">
+                                <h3>Seguridad de la Cuenta</h3>
+                                <p>Gestiona la seguridad de tu cuenta y actualiza tu contraseña.</p>
+                                
+                                <form class="config-form" id="securityForm">
+                                    <div class="form-group">
+                                        <label for="currentPassword">Contraseña Actual</label>
+                                        <input type="password" class="form-control" id="currentPassword" name="current_password">
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label for="newPassword">Nueva Contraseña</label>
+                                        <input type="password" class="form-control" id="newPassword" name="new_password">
+                                        <div class="password-strength">
+                                            <div class="strength-bar">
+                                                <div class="strength-fill" id="passwordStrength"></div>
+                                            </div>
+                                            <span class="strength-text" id="passwordText">Seguridad de la contraseña</span>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label for="confirmPassword">Confirmar Nueva Contraseña</label>
+                                        <input type="password" class="form-control" id="confirmPassword" name="confirm_password">
+                                    </div>
+                                    
+                                    <div class="form-actions">
+                                        <button type="submit" class="btn btn-primary" id="changePasswordBtn">
+                                            <i class="fas fa-key"></i>
+                                            Cambiar Contraseña
+                                        </button>
+                                    </div>
+                                    <div class="message" id="securityMessage"></div>
+                                </form>
+                                
+                                <div class="security-section">
+                                    <h4>Sesión Actual</h4>
+                                    <div class="session-info">
+                                        <div class="session-details">
+                                            <p><strong>Dispositivo:</strong> <span id="sessionDevice">-</span></p>
+                                            <p><strong>Ubicación:</strong> <span id="sessionLocation">-</span></p>
+                                            <p><strong>Última actividad:</strong> <span id="sessionLastActivity">-</span></p>
+                                            <p><strong>Dirección IP:</strong> <span id="sessionIP">-</span></p>
+                                        </div>
+                                        <button class="btn btn-outline" id="logoutAllBtn">
+                                            <i class="fas fa-sign-out-alt"></i>
+                                            Cerrar Todas las Sesiones
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Pestaña Preferencias -->
+                        <div class="tab-pane" id="preferencias">
+                            <div class="config-section">
+                                <h3>Preferencias de la Aplicación</h3>
+                                <p>Personaliza tu experiencia en la plataforma.</p>
+                                
+                                <div class="preference-settings" id="preferenceSettings">
+                                    <div class="setting-item">
+                                        <div class="setting-info">
+                                            <h4>Idioma</h4>
+                                            <p>Selecciona el idioma de la interfaz.</p>
+                                        </div>
+                                        <select class="form-control" id="languageSelect" name="language">
+                                            <option value="es">Español</option>
+                                            <option value="en">English</option>
+                                            <option value="fr">Français</option>
+                                            <option value="de">Deutsch</option>
+                                        </select>
+                                    </div>
+                                    
+                                    <div class="setting-item">
+                                        <div class="setting-info">
+                                            <h4>Zona Horaria</h4>
+                                            <p>Selecciona tu zona horaria para una correcta visualización de fechas y horas.</p>
+                                        </div>
+                                        <select class="form-control" id="timezoneSelect" name="timezone">
+                                            <option value="Europe/Madrid">Europe/Madrid (GMT+2)</option>
+                                            <option value="America/Mexico_City">America/Mexico_City (GMT-5)</option>
+                                            <option value="America/New_York">America/New_York (GMT-4)</option>
+                                            <option value="Europe/London">Europe/London (GMT+1)</option>
+                                        </select>
+                                    </div>
+                                    
+                                    <div class="setting-item">
+                                        <div class="setting-info">
+                                            <h4>Tema</h4>
+                                            <p>Selecciona el tema de la aplicación.</p>
+                                        </div>
+                                        <div class="theme-selector">
+                                            <div class="theme-option" data-theme="light">
+                                                <div class="theme-preview light-theme"></div>
+                                                <span>Claro</span>
+                                            </div>
+                                            <div class="theme-option" data-theme="dark">
+                                                <div class="theme-preview dark-theme"></div>
+                                                <span>Oscuro</span>
+                                            </div>
+                                            <div class="theme-option" data-theme="auto">
+                                                <div class="theme-preview auto-theme"></div>
+                                                <span>Automático</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="setting-item">
+                                        <div class="setting-info">
+                                            <h4>Densidad de la Interfaz</h4>
+                                            <p>Selecciona el espaciado de los elementos de la interfaz.</p>
+                                        </div>
+                                        <div class="density-selector">
+                                            <div class="density-option" data-density="compacto">
+                                                <i class="fas fa-compress-alt"></i>
+                                                <span>Compacto</span>
+                                            </div>
+                                            <div class="density-option" data-density="normal">
+                                                <i class="fas fa-arrows-alt-h"></i>
+                                                <span>Normal</span>
+                                            </div>
+                                            <div class="density-option" data-density="amplio">
+                                                <i class="fas fa-expand-alt"></i>
+                                                <span>Amplio</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-actions">
+                                    <button type="button" class="btn btn-primary" id="savePreferencesBtn">
+                                        <i class="fas fa-save"></i>
+                                        Guardar Preferencias
+                                    </button>
+                                </div>
+                                <div class="message" id="preferencesMessage"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Función para mostrar mensajes
+        function showMessage(elementId, message, type = 'success') {
+            const messageElement = document.getElementById(elementId);
+            messageElement.textContent = message;
+            messageElement.className = `message ${type}`;
+            messageElement.style.display = 'block';
+            
+            setTimeout(() => {
+                messageElement.style.display = 'none';
+            }, 5000);
+        }
+
+        // Función para cargar datos del usuario
+        async function loadUserData() {
+            try {
+                const response = await fetch('/api/user/profile', {
+                    credentials: 'include'
+                });
+                
+                if (response.ok) {
+                    const userData = await response.json();
+                    
+                    // Llenar formulario de perfil
+                    document.getElementById('nombre').value = userData.nombre || '';
+                    document.getElementById('apellido').value = userData.apellido || '';
+                    document.getElementById('email').value = userData.email || '';
+                    document.getElementById('telefono').value = userData.telefono || '';
+                    document.getElementById('institucion').value = userData.institucion || '';
+                    document.getElementById('biografia').value = userData.biografia || '';
+                    
+                    // Actualizar avatar
+                    if (userData.avatar) {
+                        document.getElementById('avatarPreview').innerHTML = `<img src="${userData.avatar}" alt="Avatar">`;
+                    } else {
+                        const initials = (userData.nombre?.[0] || '') + (userData.apellido?.[0] || '');
+                        document.getElementById('avatarPreview').innerHTML = `<span>${initials || 'U'}</span>`;
+                        document.getElementById('avatarInitials').textContent = initials || 'U';
+                    }
+                    
+                    // Cargar preferencias de notificación
+                    if (userData.notification_preferences) {
+                        const prefs = userData.notification_preferences;
+                        document.getElementById('emailNotifications').checked = prefs.email_notifications || false;
+                        document.getElementById('gradeNotifications').checked = prefs.grade_notifications || false;
+                        document.getElementById('projectNotifications').checked = prefs.project_notifications || false;
+                        document.getElementById('weeklySummary').checked = prefs.weekly_summary || false;
+                    }
+                    
+                    // Cargar preferencias de aplicación
+                    if (userData.app_preferences) {
+                        const prefs = userData.app_preferences;
+                        document.getElementById('languageSelect').value = prefs.language || 'es';
+                        document.getElementById('timezoneSelect').value = prefs.timezone || 'Europe/Madrid';
+                        
+                        // Activar tema seleccionado
+                        document.querySelectorAll('.theme-option').forEach(option => {
+                            option.classList.remove('active');
+                            if (option.dataset.theme === (prefs.theme || 'light')) {
+                                option.classList.add('active');
+                            }
+                        });
+                        
+                        // Activar densidad seleccionada
+                        document.querySelectorAll('.density-option').forEach(option => {
+                            option.classList.remove('active');
+                            if (option.dataset.density === (prefs.density || 'normal')) {
+                                option.classList.add('active');
+                            }
+                        });
+                    }
+                    
+                    // Cargar información de sesión
+                    if (userData.session_info) {
+                        const session = userData.session_info;
+                        document.getElementById('sessionDevice').textContent = session.device || 'Desconocido';
+                        document.getElementById('sessionLocation').textContent = session.location || 'Desconocida';
+                        document.getElementById('sessionLastActivity').textContent = session.last_activity || 'Desconocida';
+                        document.getElementById('sessionIP').textContent = session.ip || 'Desconocida';
+                    }
+                }
+            } catch (error) {
+                console.error('Error cargando datos del usuario:', error);
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            // Cargar datos del usuario
+            loadUserData();
+
+            // Funcionalidad de pestañas
+            const tabBtns = document.querySelectorAll('.tab-btn');
+            const tabPanes = document.querySelectorAll('.tab-pane');
+            
+            tabBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    tabBtns.forEach(b => b.classList.remove('active'));
+                    tabPanes.forEach(p => p.classList.remove('active'));
+                    
+                    btn.classList.add('active');
+                    const tabId = btn.getAttribute('data-tab');
+                    document.getElementById(tabId).classList.add('active');
+                });
+            });
+            
+            // Cambiar avatar
+            const changeAvatarBtn = document.getElementById('changeAvatarBtn');
+            const avatarInput = document.getElementById('avatarInput');
+            const removeAvatarBtn = document.getElementById('removeAvatarBtn');
+            const avatarPreview = document.getElementById('avatarPreview');
+            
+            changeAvatarBtn.addEventListener('click', () => {
+                avatarInput.click();
+            });
+            
+            avatarInput.addEventListener('change', async (e) => {
+                if (e.target.files && e.target.files[0]) {
+                    const formData = new FormData();
+                    formData.append('avatar', e.target.files[0]);
+                    
+                    try {
+                        const response = await fetch('/api/user/avatar', {
+                            method: 'POST',
+                            credentials: 'include',
+                            body: formData
+                        });
+                        
+                        if (response.ok) {
+                            const result = await response.json();
+                            avatarPreview.innerHTML = `<img src="${result.avatar_url}" alt="Avatar">`;
+                            showMessage('profileMessage', 'Avatar actualizado correctamente', 'success');
+                        } else {
+                            showMessage('profileMessage', 'Error al actualizar el avatar', 'error');
+                        }
+                    } catch (error) {
+                        console.error('Error subiendo avatar:', error);
+                        showMessage('profileMessage', 'Error al actualizar el avatar', 'error');
+                    }
+                }
+            });
+            
+            removeAvatarBtn.addEventListener('click', async () => {
+                try {
+                    const response = await fetch('/api/user/avatar', {
+                        method: 'DELETE',
+                        credentials: 'include'
+                    });
+                    
+                    if (response.ok) {
+                        const initials = document.getElementById('avatarInitials').textContent;
+                        avatarPreview.innerHTML = `<span>${initials}</span>`;
+                        avatarInput.value = '';
+                        showMessage('profileMessage', 'Avatar eliminado correctamente', 'success');
+                    } else {
+                        showMessage('profileMessage', 'Error al eliminar el avatar', 'error');
+                    }
+                } catch (error) {
+                    console.error('Error eliminando avatar:', error);
+                    showMessage('profileMessage', 'Error al eliminar el avatar', 'error');
+                }
+            });
+            
+            // Guardar perfil
+            document.getElementById('profileForm').addEventListener('submit', async (e) => {
+                e.preventDefault();
+                
+                const formData = {
+                    nombre: document.getElementById('nombre').value,
+                    apellido: document.getElementById('apellido').value,
+                    email: document.getElementById('email').value,
+                    telefono: document.getElementById('telefono').value,
+                    institucion: document.getElementById('institucion').value,
+                    biografia: document.getElementById('biografia').value
+                };
+                
+                try {
+                    const response = await fetch('/api/user/profile', {
+                        method: 'PUT',
+                        credentials: 'include',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(formData)
+                    });
+                    
+                    if (response.ok) {
+                        showMessage('profileMessage', 'Perfil actualizado correctamente', 'success');
+                        // Actualizar avatar con nuevas iniciales
+                        const initials = (formData.nombre?.[0] || '') + (formData.apellido?.[0] || '');
+                        document.getElementById('avatarInitials').textContent = initials || 'U';
+                    } else {
+                        const error = await response.json();
+                        showMessage('profileMessage', error.message || 'Error al actualizar el perfil', 'error');
+                    }
+                } catch (error) {
+                    console.error('Error actualizando perfil:', error);
+                    showMessage('profileMessage', 'Error al actualizar el perfil', 'error');
+                }
+            });
+            
+            // Cancelar cambios en perfil
+            document.getElementById('cancelProfileBtn').addEventListener('click', () => {
+                loadUserData();
+            });
+            
+            // Guardar preferencias de notificación
+            document.getElementById('saveNotificationsBtn').addEventListener('click', async () => {
+                const notificationData = {
+                    email_notifications: document.getElementById('emailNotifications').checked,
+                    grade_notifications: document.getElementById('gradeNotifications').checked,
+                    project_notifications: document.getElementById('projectNotifications').checked,
+                    weekly_summary: document.getElementById('weeklySummary').checked
+                };
+                
+                try {
+                    const response = await fetch('/api/user/notifications', {
+                        method: 'PUT',
+                        credentials: 'include',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(notificationData)
+                    });
+                    
+                    if (response.ok) {
+                        showMessage('notificationsMessage', 'Preferencias de notificación guardadas', 'success');
+                    } else {
+                        const error = await response.json();
+                        showMessage('notificationsMessage', error.message || 'Error al guardar las preferencias', 'error');
+                    }
+                } catch (error) {
+                    console.error('Error guardando preferencias de notificación:', error);
+                    showMessage('notificationsMessage', 'Error al guardar las preferencias', 'error');
+                }
+            });
+            
+            // Validación de contraseña
+            const newPassword = document.getElementById('newPassword');
+            const passwordStrength = document.getElementById('passwordStrength');
+            const passwordText = document.getElementById('passwordText');
+            
+            newPassword.addEventListener('input', () => {
+                const password = newPassword.value;
+                let strength = 0;
+                let text = '';
+                
+                if (password.length >= 8) strength += 25;
+                if (/[A-Z]/.test(password)) strength += 25;
+                if (/[0-9]/.test(password)) strength += 25;
+                if (/[^A-Za-z0-9]/.test(password)) strength += 25;
+                
+                passwordStrength.style.width = `${strength}%`;
+                
+                if (strength < 50) {
+                    passwordStrength.style.backgroundColor = '#ef476f';
+                    text = 'Débil';
+                } else if (strength < 75) {
+                    passwordStrength.style.backgroundColor = '#ffd166';
+                    text = 'Moderada';
+                } else {
+                    passwordStrength.style.backgroundColor = '#4cc9f0';
+                    text = 'Fuerte';
+                }
+                
+                passwordText.textContent = text;
+            });
+            
+            // Cambiar contraseña
+            document.getElementById('securityForm').addEventListener('submit', async (e) => {
+                e.preventDefault();
+                
+                const currentPassword = document.getElementById('currentPassword').value;
+                const newPassword = document.getElementById('newPassword').value;
+                const confirmPassword = document.getElementById('confirmPassword').value;
+                
+                if (newPassword !== confirmPassword) {
+                    showMessage('securityMessage', 'Las contraseñas no coinciden', 'error');
+                    return;
+                }
+                
+                try {
+                    const response = await fetch('/api/user/password', {
+                        method: 'PUT',
+                        credentials: 'include',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            current_password: currentPassword,
+                            new_password: newPassword
+                        })
+                    });
+                    
+                    if (response.ok) {
+                        showMessage('securityMessage', 'Contraseña cambiada correctamente', 'success');
+                        document.getElementById('securityForm').reset();
+                        passwordStrength.style.width = '0%';
+                        passwordText.textContent = 'Seguridad de la contraseña';
+                    } else {
+                        const error = await response.json();
+                        showMessage('securityMessage', error.message || 'Error al cambiar la contraseña', 'error');
+                    }
+                } catch (error) {
+                    console.error('Error cambiando contraseña:', error);
+                    showMessage('securityMessage', 'Error al cambiar la contraseña', 'error');
+                }
+            });
+            
+            // Cerrar todas las sesiones
+            document.getElementById('logoutAllBtn').addEventListener('click', async () => {
+                if (confirm('¿Estás seguro de que deseas cerrar todas las sesiones excepto la actual?')) {
+                    try {
+                        const response = await fetch('/api/user/sessions', {
+                            method: 'DELETE',
+                            credentials: 'include'
+                        });
+                        
+                        if (response.ok) {
+                            showMessage('securityMessage', 'Todas las sesiones han sido cerradas', 'success');
+                        } else {
+                            const error = await response.json();
+                            showMessage('securityMessage', error.message || 'Error al cerrar las sesiones', 'error');
+                        }
+                    } catch (error) {
+                        console.error('Error cerrando sesiones:', error);
+                        showMessage('securityMessage', 'Error al cerrar las sesiones', 'error');
+                    }
+                }
+            });
+            
+            // Selector de tema
+            const themeOptions = document.querySelectorAll('.theme-option');
+            
+            themeOptions.forEach(option => {
+                option.addEventListener('click', () => {
+                    themeOptions.forEach(o => o.classList.remove('active'));
+                    option.classList.add('active');
+                });
+            });
+            
+            // Selector de densidad
+            const densityOptions = document.querySelectorAll('.density-option');
+            
+            densityOptions.forEach(option => {
+                option.addEventListener('click', () => {
+                    densityOptions.forEach(o => o.classList.remove('active'));
+                    option.classList.add('active');
+                });
+            });
+            
+            // Guardar preferencias
+            document.getElementById('savePreferencesBtn').addEventListener('click', async () => {
+                const selectedTheme = document.querySelector('.theme-option.active').dataset.theme;
+                const selectedDensity = document.querySelector('.density-option.active').dataset.density;
+                
+                const preferenceData = {
+                    language: document.getElementById('languageSelect').value,
+                    timezone: document.getElementById('timezoneSelect').value,
+                    theme: selectedTheme,
+                    density: selectedDensity
+                };
+                
+                try {
+                    const response = await fetch('/api/user/preferences', {
+                        method: 'PUT',
+                        credentials: 'include',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(preferenceData)
+                    });
+                    
+                    if (response.ok) {
+                        showMessage('preferencesMessage', 'Preferencias guardadas correctamente', 'success');
+                    } else {
+                        const error = await response.json();
+                        showMessage('preferencesMessage', error.message || 'Error al guardar las preferencias', 'error');
+                    }
+                } catch (error) {
+                    console.error('Error guardando preferencias:', error);
+                    showMessage('preferencesMessage', 'Error al guardar las preferencias', 'error');
+                }
+            });
+        });
+    </script>
+    <script src="header.js"></script>
+</body>
+</html>

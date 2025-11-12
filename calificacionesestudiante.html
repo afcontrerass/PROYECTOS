@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calificaciones - Sistema de Gestión Docente</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header class="site-header">
+            <div class="logo">
+                <a href="/indexdocente.html" style="display:flex;align-items:center;gap:12px;text-decoration:none;color:inherit">
+                    <i class="fas fa-graduation-cap" style="font-size:28px;color:var(--primary)"></i>
+                    <h1 style="font-size:20px;margin:0">Sistema Académico</h1>
+                </a>
+            </div>
+
+            <div class="user-actions">
+                <div class="notification-bell" id="notificationBell">
+                    <i class="far fa-bell"></i>
+                    <span class="notification-count">3</span>
+                    <div class="notification-panel" id="notificationPanel">
+                        <div class="notification-header">
+                            <h3>Notificaciones</h3>
+                            <span class="mark-all-read" style="cursor:pointer;font-size:12px;color:var(--primary);">Marcar todo como leído</span>
+                        </div>
+                        <div class="notification-list">
+                            <div class="notification-item unread">
+                                <div class="notification-icon icon-info">
+                                    <i class="fas fa-info-circle"></i>
+                                </div>
+                                <div class="notification-content">
+                                    <div class="notification-title">Nueva tarea asignada</div>
+                                    <p>Matemáticas - Ejercicios de álgebra</p>
+                                    <div class="notification-time">Hace 2 horas</div>
+                                </div>
+                            </div>
+                            <div class="notification-item unread">
+                                <div class="notification-icon icon-warning">
+                                    <i class="fas fa-exclamation-triangle"></i>
+                                </div>
+                                <div class="notification-content">
+                                    <div class="notification-title">Tarea próxima a vencer</div>
+                                    <p>Historia - Ensayo sobre la revolución</p>
+                                    <div class="notification-time">Ayer</div>
+                                </div>
+                            </div>
+                            <div class="notification-item">
+                                <div class="notification-icon icon-urgent">
+                                    <i class="fas fa-fire"></i>
+                                </div>
+                                <div class="notification-content">
+                                    <div class="notification-title">Calificación publicada</div>
+                                    <p>Física - Examen parcial</p>
+                                    <div class="notification-time">Hace 3 días</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="user-profile">
+                    <div class="avatar" id="avatar">D</div>
+                    <div class="user-info">
+                        <div class="user-name" id="userName">-</div>
+                        <div class="user-role" id="userRole">-</div>
+                        <button id="logoutBtn" style="margin-left:10px;padding:6px 10px;border-radius:6px;background:var(--primary);color:white;border:none;cursor:pointer;">Cerrar sesión</button>
+                    </div>
+                </div>
+            </div>
+        </header>
+        
+        <div class="main-content">
+            <div class="sidebar">
+                <ul class="sidebar-menu">
+                    <li>
+                        <i class="fas fa-home"></i>
+                        <span><a href="indexestudiante.html">Inicio</a></span>
+                    </li>
+                    <li>
+                        <i class="fas fa-upload"></i>
+                        <span><a href="proyectosestudiante.html">Proyectos</a></span>
+                    </li>
+                    <li>
+                        <i class="fas fa-calendar-alt"></i>
+                        <span><a href="calendarioestudiante.html">Calendario</a></span>
+                    </li>
+                    <li class="active">
+                        <i class="fas fa-chart-bar"></i>
+                        <span><a href="calificacionesestudiante.html">Calificaciones</a></span>
+                    </li>
+                    <li>
+                        <i class="fas fa-cog"></i>
+                        <span><a href="configuracionedtudiante.html">Configuración</a></span>
+                    </li>
+                </ul>
+            </div>
+            
+            <div class="content">
+                <div class="section-header">
+                    <h2>Calificaciones</h2>
+                    <div class="period-selector">
+                        <select class="form-control" id="academicPeriod">
+                            <option value="2024-1">2024 - Periodo 1</option>
+                            <option value="2023-2">2023 - Periodo 2</option>
+                            <option value="2023-1">2023 - Periodo 1</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <!-- Resumen General -->
+                <div class="grades-summary">
+                    <div class="summary-card">
+                        <div class="summary-icon">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <div class="summary-content">
+                            <div class="summary-value">8.7</div>
+                            <div class="summary-label">Promedio General</div>
+                        </div>
+                    </div>
+                    
+                    <div class="summary-card">
+                        <div class="summary-icon">
+                            <i class="fas fa-trophy"></i>
+                        </div>
+                        <div class="summary-content">
+                            <div class="summary-value">9.2</div>
+                            <div class="summary-label">Mejor Calificación</div>
+                        </div>
+                    </div>
+                    
+                    <div class="summary-card">
+                        <div class="summary-icon">
+                            <i class="fas fa-exclamation-triangle"></i>
+                        </div>
+                        <div class="summary-content">
+                            <div class="summary-value">7.5</div>
+                            <div class="summary-label">Peor Calificación</div>
+                        </div>
+                    </div>
+                    
+                    <div class="summary-card">
+                        <div class="summary-icon">
+                            <i class="fas fa-book"></i>
+                        </div>
+                        <div class="summary-content">
+                            <div class="summary-value">6</div>
+                            <div class="summary-label">Materias Activas</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Navegación por Cortes -->
+                <div class="grades-tabs">
+                    <div class="tab-buttons">
+                        <button class="tab-btn active" data-tab="corte1">Primer Corte</button>
+                        <button class="tab-btn" data-tab="corte2">Segundo Corte</button>
+                        <button class="tab-btn" data-tab="corte3">Tercer Corte</button>
+                        <button class="tab-btn" data-tab="final">Nota Final</button>
+                    </div>
+                    
+                    <div class="tab-content">
+                        <!-- Primer Corte -->
+                        <div class="tab-pane active" id="corte1">
+                            <div class="corte-info">
+                                <div class="corte-header">
+                                    <h3>Primer Corte - 35% de la Nota Final</h3>
+                                    <div class="corte-average">
+                                        <span class="average-label">Promedio:</span>
+                                        <span class="average-value">8.5</span>
+                                    </div>
+                                </div>
+                                
+                                <div class="subjects-grid">
+                                    <div class="subject-card">
+                                        <div class="subject-header">
+                                            <h4>Matemáticas</h4>
+                                            <div class="subject-grade excellent">8.8</div>
+                                        </div>
+                                        <div class="subject-details">
+                                            <div class="grade-breakdown">
+                                                <div class="grade-item">
+                                                    <span class="grade-name">Quiz 1</span>
+                                                    <span class="grade-value">9.0</span>
+                                                </div>
+                                                <div class="grade-item">
+                                                    <span class="grade-name">Tarea 1</span>
+                                                    <span class="grade-value">8.5</span>
+                                                </div>
+                                                <div class="grade-item">
+                                                    <span class="grade-name">Examen Parcial</span>
+                                                    <span class="grade-value">9.0</span>
+                                                </div>
+                                            </div>
+                                            <div class="grade-progress">
+                                                <div class="progress-bar">
+                                                    <div class="progress-fill" style="width: 88%"></div>
+                                                </div>
+                                                <span class="progress-text">88%</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="subject-card">
+                                        <div class="subject-header">
+                                            <h4>Física</h4>
+                                            <div class="subject-grade good">8.2</div>
+                                        </div>
+                                        <div class="subject-details">
+                                            <div class="grade-breakdown">
+                                                <div class="grade-item">
+                                                    <span class="grade-name">Laboratorio 1</span>
+                                                    <span class="grade-value">8.0</span>
+                                                </div>
+                                                <div class="grade-item">
+                                                    <span class="grade-name">Proyecto</span>
+                                                    <span class="grade-value">8.5</span>
+                                                </div>
+                                                <div class="grade-item">
+                                                    <span class="grade-name">Examen</span>
+                                                    <span class="grade-value">8.0</span>
+                                                </div>
+                                            </div>
+                                            <div class="grade-progress">
+                                                <div class="progress-bar">
+                                                    <div class="progress-fill" style="width: 82%"></div>
+                                                </div>
+                                                <span class="progress-text">82%</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="subject-card">
+                                        <div class="subject-header">
+                                            <h4>Historia</h4>
+                                            <div class="subject-grade excellent">9.2</div>
+                                        </div>
+                                        <div class="subject-details">
+                                            <div class="grade-breakdown">
+                                                <div class="grade-item">
+                                                    <span class="grade-name">Ensayo</span>
+                                                    <span class="grade-value">9.5</span>
+                                                </div>
+                                                <div class="grade-item">
+                                                    <span class="grade-name">Presentación</span>
+                                                    <span class="grade-value">9.0</span>
+                                                </div>
+                                                <div class="grade-item">
+                                                    <span class="grade-name">Examen</span>
+                                                    <span class="grade-value">9.0</span>
+                                                </div>
+                                            </div>
+                                            <div class="grade-progress">
+                                                <div class="progress-bar">
+                                                    <div class="progress-fill" style="width: 92%"></div>
+                                                </div>
+                                                <span class="progress-text">92%</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="subject-card">
+                                        <div class="subject-header">
+                                            <h4>Programación</h4>
+                                            <div class="subject-grade average">7.8</div>
+                                        </div>
+                                        <div class="subject-details">
+                                            <div class="grade-breakdown">
+                                                <div class="grade-item">
+                                                    <span class="grade-name">Proyecto 1</span>
+                                                    <span class="grade-value">8.0</span>
+                                                </div>
+                                                <div class="grade-item">
+                                                    <span class="grade-name">Ejercicios</span>
+                                                    <span class="grade-value">7.5</span>
+                                                </div>
+                                                <div class="grade-item">
+                                                    <span class="grade-name">Quiz</span>
+                                                    <span class="grade-value">8.0</span>
+                                                </div>
+                                            </div>
+                                            <div class="grade-progress">
+                                                <div class="progress-bar">
+                                                    <div class="progress-fill" style="width: 78%"></div>
+                                                </div>
+                                                <span class="progress-text">78%</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="subject-card">
+                                        <div class="subject-header">
+                                            <h4>Inglés</h4>
+                                            <div class="subject-grade good">8.5</div>
+                                        </div>
+                                        <div class="subject-details">
+                                            <div class="grade-breakdown">
+                                                <div class="grade-item">
+                                                    <span class="grade-name">Speaking</span>
+                                                    <span class="grade-value">8.0</span>
+                                                </div>
+                                                <div class="grade-item">
+                                                    <span class="grade-name">Writing</span>
+                                                    <span class="grade-value">9.0</span>
+                                                </div>
+                                                <div class="grade-item">
+                                                    <span class="grade-name">Listening</span>
+                                                    <span class="grade-value">8.5</span>
+                                                </div>
+                                            </div>
+                                            <div class="grade-progress">
+                                                <div class="progress-bar">
+                                                    <div class="progress-fill" style="width: 85%"></div>
+                                                </div>
+                                                <span class="progress-text">85%</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="subject-card">
+                                        <div class="subject-header">
+                                            <h4>Ética</h4>
+                                            <div class="subject-grade excellent">9.0</div>
+                                        </div>
+                                        <div class="subject-details">
+                                            <div class="grade-breakdown">
+                                                <div class="grade-item">
+                                                    <span class="grade-name">Debate</span>
+                                                    <span class="grade-value">9.0</span>
+                                                </div>
+                                                <div class="grade-item">
+                                                    <span class="grade-name">Ensayo</span>
+                                                    <span class="grade-value">9.0</span>
+                                                </div>
+                                                <div class="grade-item">
+                                                    <span class="grade-name">Participación</span>
+                                                    <span class="grade-value">9.0</span>
+                                                </div>
+                                            </div>
+                                            <div class="grade-progress">
+                                                <div class="progress-bar">
+                                                    <div class="progress-fill" style="width: 90%"></div>
+                                                </div>
+                                                <span class="progress-text">90%</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Segundo Corte -->
+                        <div class="tab-pane" id="corte2">
+                            <div class="corte-info">
+                                <div class="corte-header">
+                                    <h3>Segundo Corte - 35% de la Nota Final</h3>
+                                    <div class="corte-average">
+                                        <span class="average-label">Promedio:</span>
+                                        <span class="average-value">8.9</span>
+                                    </div>
+                                </div>
+                                
+                                <div class="subjects-grid">
+                                    <div class="subject-card">
+                                        <div class="subject-header">
+                                            <h4>Matemáticas</h4>
+                                            <div class="subject-grade excellent">9.0</div>
+                                        </div>
+                                        <div class="subject-details">
+                                            <div class="grade-breakdown">
+                                                <div class="grade-item">
+                                                    <span class="grade-name">Quiz 2</span>
+                                                    <span class="grade-value">9.0</span>
+                                                </div>
+                                                <div class="grade-item">
+                                                    <span class="grade-name">Tarea 2</span>
+                                                    <span class="grade-value">9.0</span>
+                                                </div>
+                                                <div class="grade-item">
+                                                    <span class="grade-name">Examen Parcial</span>
+                                                    <span class="grade-value">9.0</span>
+                                                </div>
+                                            </div>
+                                            <div class="grade-progress">
+                                                <div class="progress-bar">
+                                                    <div class="progress-fill" style="width: 90%"></div>
+                                                </div>
+                                                <span class="progress-text">90%</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="subject-card">
+                                        <div class="subject-header">
+                                            <h4>Física</h4>
+                                            <div class="subject-grade excellent">8.8</div>
+                                        </div>
+                                        <div class="subject-details">
+                                            <div class="grade-breakdown">
+                                                <div class="grade-item">
+                                                    <span class="grade-name">Laboratorio 2</span>
+                                                    <span class="grade-value">8.5</span>
+                                                </div>
+                                                <div class="grade-item">
+                                                    <span class="grade-name">Proyecto 2</span>
+                                                    <span class="grade-value">9.0</span>
+                                                </div>
+                                                <div class="grade-item">
+                                                    <span class="grade-name">Examen</span>
+                                                    <span class="grade-value">9.0</span>
+                                                </div>
+                                            </div>
+                                            <div class="grade-progress">
+                                                <div class="progress-bar">
+                                                    <div class="progress-fill" style="width: 88%"></div>
+                                                </div>
+                                                <span class="progress-text">88%</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Más materias para el segundo corte -->
+                                    <div class="subject-card">
+                                        <div class="subject-header">
+                                            <h4>Programación</h4>
+                                            <div class="subject-grade good">8.3</div>
+                                        </div>
+                                        <div class="subject-details">
+                                            <div class="grade-breakdown">
+                                                <div class="grade-item">
+                                                    <span class="grade-name">Proyecto 2</span>
+                                                    <span class="grade-value">8.5</span>
+                                                </div>
+                                                <div class="grade-item">
+                                                    <span class="grade-name">Ejercicios</span>
+                                                    <span class="grade-value">8.0</span>
+                                                </div>
+                                                <div class="grade-item">
+                                                    <span class="grade-name">Quiz 2</span>
+                                                    <span class="grade-value">8.5</span>
+                                                </div>
+                                            </div>
+                                            <div class="grade-progress">
+                                                <div class="progress-bar">
+                                                    <div class="progress-fill" style="width: 83%"></div>
+                                                </div>
+                                                <span class="progress-text">83%</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="corte-message info">
+                                    <i class="fas fa-info-circle"></i>
+                                    <p>El segundo corte aún está en progreso. Algunas calificaciones pueden estar pendientes.</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Tercer Corte -->
+                        <div class="tab-pane" id="corte3">
+                            <div class="corte-info">
+                                <div class="corte-header">
+                                    <h3>Tercer Corte - 30% de la Nota Final</h3>
+                                    <div class="corte-average">
+                                        <span class="average-label">Promedio:</span>
+                                        <span class="average-value">-</span>
+                                    </div>
+                                </div>
+                                
+                                <div class="subjects-grid">
+                                    <div class="subject-card pending">
+                                        <div class="subject-header">
+                                            <h4>Matemáticas</h4>
+                                            <div class="subject-grade pending">-</div>
+                                        </div>
+                                        <div class="subject-details">
+                                            <div class="grade-breakdown">
+                                                <div class="grade-item pending">
+                                                    <span class="grade-name">Examen Final</span>
+                                                    <span class="grade-value">Pendiente</span>
+                                                </div>
+                                                <div class="grade-item pending">
+                                                    <span class="grade-name">Proyecto Final</span>
+                                                    <span class="grade-value">Pendiente</span>
+                                                </div>
+                                            </div>
+                                            <div class="grade-progress">
+                                                <div class="progress-bar">
+                                                    <div class="progress-fill" style="width: 0%"></div>
+                                                </div>
+                                                <span class="progress-text">0%</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Más materias pendientes para el tercer corte -->
+                                </div>
+                                
+                                <div class="corte-message warning">
+                                    <i class="fas fa-clock"></i>
+                                    <p>El tercer corte comenzará el 15 de octubre. Las calificaciones estarán disponibles una vez que se completen las evaluaciones.</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Nota Final -->
+                        <div class="tab-pane" id="final">
+                            <div class="final-grades">
+                                <div class="final-summary">
+                                    <h3>Resumen de Calificaciones Finales</h3>
+                                    <div class="final-average">
+                                        <div class="final-average-value">8.7</div>
+                                        <div class="final-average-label">Promedio Final</div>
+                                        <div class="final-status excellent">Excelente</div>
+                                    </div>
+                                </div>
+                                
+                                <div class="final-subjects">
+                                    <div class="final-subject-card">
+                                        <div class="subject-info">
+                                            <h4>Matemáticas</h4>
+                                            <div class="subject-credits">4 créditos</div>
+                                        </div>
+                                        <div class="subject-final-grade excellent">8.9</div>
+                                        <div class="subject-breakdown">
+                                            <div class="breakdown-item">
+                                                <span>Corte 1: 8.8 (35%)</span>
+                                                <span>3.08</span>
+                                            </div>
+                                            <div class="breakdown-item">
+                                                <span>Corte 2: 9.0 (35%)</span>
+                                                <span>3.15</span>
+                                            </div>
+                                            <div class="breakdown-item">
+                                                <span>Corte 3: 8.8 (30%)</span>
+                                                <span>2.64</span>
+                                            </div>
+                                            <div class="breakdown-item total">
+                                                <span>Nota Final</span>
+                                                <span>8.87</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="final-subject-card">
+                                        <div class="subject-info">
+                                            <h4>Física</h4>
+                                            <div class="subject-credits">3 créditos</div>
+                                        </div>
+                                        <div class="subject-final-grade good">8.5</div>
+                                        <div class="subject-breakdown">
+                                            <div class="breakdown-item">
+                                                <span>Corte 1: 8.2 (35%)</span>
+                                                <span>2.87</span>
+                                            </div>
+                                            <div class="breakdown-item">
+                                                <span>Corte 2: 8.8 (35%)</span>
+                                                <span>3.08</span>
+                                            </div>
+                                            <div class="breakdown-item">
+                                                <span>Corte 3: 8.5 (30%)</span>
+                                                <span>2.55</span>
+                                            </div>
+                                            <div class="breakdown-item total">
+                                                <span>Nota Final</span>
+                                                <span>8.50</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Más materias finales -->
+                                </div>
+                                
+                                <div class="final-statistics">
+                                    <h4>Estadísticas del Periodo</h4>
+                                    <div class="stats-grid">
+                                        <div class="stat-card">
+                                            <div class="stat-value">6</div>
+                                            <div class="stat-label">Materias Cursadas</div>
+                                        </div>
+                                        <div class="stat-card">
+                                            <div class="stat-value">21</div>
+                                            <div class="stat-label">Créditos Totales</div>
+                                        </div>
+                                        <div class="stat-card">
+                                            <div class="stat-value">4</div>
+                                            <div class="stat-label">Materias Excelentes</div>
+                                        </div>
+                                        <div class="stat-card">
+                                            <div class="stat-value">2</div>
+                                            <div class="stat-label">Materias Buenas</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        async function getMe(){
+            const res = await fetch('/me', { credentials: 'include' });
+            if(!res.ok) return null;
+            return await res.json();
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            // Obtener información del usuario
+            getMe().then(user => {
+                if(!user) { 
+                    window.location.href = '/login.html'; 
+                    return; 
+                }
+                document.getElementById('userName').textContent = user.username || 'Usuario';
+                document.getElementById('userRole').textContent = user.role || 'Docente';
+                
+                // Actualizar avatar con primera letra del nombre
+                const firstLetter = (user.username || 'D').charAt(0).toUpperCase();
+                document.getElementById('avatar').textContent = firstLetter;
+            });
+
+            // Cerrar sesión
+            document.getElementById('logoutBtn').addEventListener('click', async () => {
+                await fetch('/logout', { method: 'POST', credentials: 'include' });
+                window.location.href = '/login.html';
+            });
+
+            // Funcionalidad de pestañas de calificaciones
+            const tabBtns = document.querySelectorAll('.tab-btn');
+            const tabPanes = document.querySelectorAll('.tab-pane');
+            
+            tabBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    // Remover clase activa de todos los botones y paneles
+                    tabBtns.forEach(b => b.classList.remove('active'));
+                    tabPanes.forEach(p => p.classList.remove('active'));
+                    
+                    // Agregar clase activa al botón y panel seleccionado
+                    btn.classList.add('active');
+                    const tabId = btn.getAttribute('data-tab');
+                    const targetPane = document.getElementById(tabId);
+                    if(targetPane) {
+                        targetPane.classList.add('active');
+                    }
+                });
+            });
+            
+            // Cambio de periodo académico
+            const academicPeriod = document.getElementById('academicPeriod');
+            if(academicPeriod) {
+                academicPeriod.addEventListener('change', () => {
+                    console.log('Periodo seleccionado:', academicPeriod.value);
+                    // Aquí se cargarían las calificaciones del periodo seleccionado
+                });
+            }
+
+            // Toggle panel de notificaciones
+            const notificationBell = document.getElementById('notificationBell');
+            const notificationPanel = document.getElementById('notificationPanel');
+            
+            if(notificationBell && notificationPanel) {
+                notificationBell.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const isVisible = notificationPanel.style.display === 'block';
+                    notificationPanel.style.display = isVisible ? 'none' : 'block';
+                });
+                
+                // Cerrar panel al hacer clic fuera
+                document.addEventListener('click', (e) => {
+                    if(!notificationBell.contains(e.target) && !notificationPanel.contains(e.target)) {
+                        notificationPanel.style.display = 'none';
+                    }
+                });
+            }
+        });
+    </script>
+    <!-- Al final del body, reemplaza las líneas existentes con: -->
+<script src="/header.js"></script>
+<script src="/js/calificaciones.js"></script>
+</body>
+</html>

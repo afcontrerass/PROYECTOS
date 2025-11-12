@@ -1,0 +1,1481 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EduTask - Gestor de Proyectos</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #f17908;
+            --secondary: #140202;
+            --accent: #f72585;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --success: #4cc9f0;
+            --warning: #ffd166;
+            --danger: #ef476f;
+            --gray: #adb5bd;
+            --info: #4361ee;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #f5f7fa, #c3cfe2);
+            color: var(--dark);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+            backdrop-filter: blur(10px);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo h1 {
+            font-size: 28px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .logo i {
+            font-size: 22px;
+            color: var(--primary);
+        }
+
+        .user-actions {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .notification-bell {
+            position: relative;
+            cursor: pointer;
+            font-size: 24px;
+            color: var(--dark);
+        }
+
+        .notification-count {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: var(--accent);
+            color: white;
+            font-size: 12px;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: bold;
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+        }
+
+        .avatar {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-weight: bold;
+            font-size: 18px;
+        }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 3fr;
+            gap: 30px;
+        }
+
+        .sidebar {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+            height: fit-content;
+        }
+
+        .sidebar-menu {
+            list-style: none;
+        }
+
+        .sidebar-menu li {
+            margin-bottom: 15px;
+            padding: 12px 15px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .sidebar-menu li.active {
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            color: white;
+        }
+
+        .sidebar-menu li:hover:not(.active) {
+            background: rgba(67, 97, 238, 0.1);
+        }
+
+        .sidebar-menu i {
+            font-size: 20px;
+        }
+
+        .content {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .section-header h2 {
+            font-size: 24px;
+            color: var(--dark);
+        }
+
+        .btn {
+            padding: 12px 25px;
+            border-radius: 10px;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            color: white;
+        }
+
+        .btn-primary:hover {
+            box-shadow: 0 5px 15px rgba(67, 97, 238, 0.4);
+        }
+
+        .btn-danger {
+            background: var(--danger);
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #d9365e;
+            box-shadow: 0 5px 15px rgba(239, 71, 111, 0.4);
+        }
+
+        .projects-section {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+        }
+
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .project-card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s;
+            border-left: 4px solid var(--primary);
+            position: relative;
+        }
+
+        .project-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .project-card.urgent {
+            border-left: 4px solid var(--accent);
+        }
+
+        .project-card.completed {
+            border-left: 4px solid var(--success);
+        }
+
+        .project-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 15px;
+        }
+
+        .project-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .project-dates {
+            font-size: 14px;
+            color: var(--gray);
+        }
+
+        .project-description {
+            color: var(--gray);
+            margin-bottom: 20px;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .project-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .project-members {
+            display: flex;
+            align-items: center;
+        }
+
+        .member-avatar {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-weight: bold;
+            font-size: 12px;
+            margin-left: -8px;
+            border: 2px solid white;
+        }
+
+        .member-avatar:first-child {
+            margin-left: 0;
+        }
+
+        .more-members {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: var(--gray);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-size: 12px;
+            margin-left: -8px;
+            border: 2px solid white;
+        }
+
+        .project-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .project-btn {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: rgba(67, 97, 238, 0.1);
+            color: var(--primary);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .project-btn:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        .delete-btn {
+            background: rgba(239, 71, 111, 0.1);
+            color: var(--danger);
+        }
+
+        .delete-btn:hover {
+            background: var(--danger);
+            color: white;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(5px);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 600px;
+            padding: 30px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+            position: relative;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 24px;
+            cursor: pointer;
+            color: var(--gray);
+        }
+
+        .modal-header {
+            margin-bottom: 20px;
+        }
+
+        .modal-header h2 {
+            font-size: 24px;
+            color: var(--dark);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--dark);
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
+        }
+
+        textarea.form-control {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .date-inputs {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .members-input {
+            display: flex;
+            gap: 10px;
+        }
+
+        .members-input input {
+            flex-grow: 1;
+        }
+
+        .members-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 10px;
+        }
+
+        .member-tag {
+            background: rgba(67, 97, 238, 0.1);
+            color: var(--primary);
+            padding: 6px 12px;
+            border-radius: 16px;
+            font-size: 14px;
+            border: 1px solid rgba(67, 97, 238, 0.2);
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--gray);
+        }
+
+        .empty-state i {
+            font-size: 60px;
+            margin-bottom: 20px;
+            opacity: 0.5;
+        }
+
+        .empty-state h3 {
+            font-size: 20px;
+            margin-bottom: 10px;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 20px;
+            color: var(--gray);
+        }
+
+        .loading i {
+            font-size: 30px;
+            margin-bottom: 10px;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* ==========================
+           ESTILOS ADICIONALES PARA PROYECTOS ESTUDIANTE
+           ========================== */
+
+        /* Estilos para entregables */
+        .entregable-item {
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 15px;
+            transition: all 0.3s ease;
+            background: white;
+        }
+
+        .entregable-item:hover {
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            transform: translateY(-1px);
+        }
+
+        .entregable-item.completado {
+            border-left: 4px solid var(--success);
+        }
+
+        .entregable-item.en_progreso {
+            border-left: 4px solid var(--warning);
+        }
+
+        .entregable-item.pendiente {
+            border-left: 4px solid var(--gray);
+        }
+
+        /* Badges de estado */
+        .status-badge {
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: bold;
+            color: white;
+            text-transform: uppercase;
+        }
+
+        .status-badge.completado {
+            background: var(--success) !important;
+        }
+
+        .status-badge.en_progreso {
+            background: var(--warning) !important;
+            color: var(--dark);
+        }
+
+        .status-badge.pendiente {
+            background: var(--gray) !important;
+        }
+
+        /* Barras de progreso */
+        .progress-bar {
+            background: #e9ecef;
+            border-radius: 3px;
+            overflow: hidden;
+            height: 6px;
+            margin: 5px 0;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--primary);
+            transition: width 0.3s ease;
+        }
+
+        .progress-fill.success {
+            background: var(--success);
+        }
+
+        .progress-fill.warning {
+            background: var(--warning);
+        }
+
+        .progress-fill.danger {
+            background: var(--danger);
+        }
+
+        /* Información de progreso */
+        .progress-info {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            color: var(--gray);
+            margin-bottom: 5px;
+        }
+
+        /* Mejoras para los modales */
+        .modal-content {
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-section {
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .modal-section:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+        }
+
+        /* Estados de los proyectos */
+        .project-status-badge {
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        .status-planificado {
+            background: rgba(67, 97, 238, 0.1);
+            color: var(--info);
+        }
+
+        .status-en-progreso {
+            background: rgba(255, 209, 102, 0.2);
+            color: #e6a400;
+        }
+
+        .status-completado {
+            background: rgba(76, 201, 240, 0.2);
+            color: var(--success);
+        }
+
+        /* Indicadores visuales */
+        .indicator {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 14px;
+        }
+
+        .indicator-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+        }
+
+        .indicator-dot.success {
+            background: var(--success);
+        }
+
+        .indicator-dot.warning {
+            background: var(--warning);
+        }
+
+        .indicator-dot.danger {
+            background: var(--danger);
+        }
+
+        .indicator-dot.info {
+            background: var(--info);
+        }
+
+        /* Botones de acción mejorados */
+        .btn-sm {
+            padding: 8px 16px;
+            font-size: 14px;
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 1px solid var(--primary);
+            color: var(--primary);
+        }
+
+        .btn-outline:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        /* Notificaciones de estado */
+        .alert {
+            padding: 12px 16px;
+            border-radius: 8px;
+            margin: 10px 0;
+            font-size: 14px;
+        }
+
+        .alert-success {
+            background: rgba(76, 201, 240, 0.1);
+            border: 1px solid var(--success);
+            color: var(--success);
+        }
+
+        .alert-warning {
+            background: rgba(255, 209, 102, 0.1);
+            border: 1px solid var(--warning);
+            color: #e6a400;
+        }
+
+        .alert-info {
+            background: rgba(67, 97, 238, 0.1);
+            border: 1px solid var(--info);
+            color: var(--info);
+        }
+
+        /* Grid de estadísticas */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 15px;
+            margin: 15px 0;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            border: 1px solid #e2e8f0;
+        }
+
+        .stat-value {
+            font-size: 24px;
+            font-weight: bold;
+            color: var(--primary);
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: var(--gray);
+            text-transform: uppercase;
+        }
+
+        /* Responsive */
+        @media (max-width: 992px) {
+            .projects-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .projects-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .date-inputs {
+                grid-template-columns: 1fr;
+            }
+            
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            header {
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+            }
+            
+            .user-actions {
+                justify-content: center;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 10px;
+            }
+            
+            .projects-section {
+                padding: 15px;
+            }
+            
+            .project-card {
+                padding: 15px;
+            }
+            
+            .modal-content {
+                padding: 20px;
+                margin: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="site-header">
+            <div class="logo">
+                <a href="/proyectosestudiante.html" style="display:flex;align-items:center;gap:12px;text-decoration:none;color:inherit">
+                    <img src="logo.png" alt="Logo" style="height:40px;object-fit:contain">
+                    <h1 style="font-size:20px;margin:0">PROJECT MANAGEMENT</h1>
+                </a>
+            </div>
+
+            <div class="user-actions">
+                <div class="notification-bell" id="notificationBell">
+                    <i class="far fa-bell"></i>
+                    <span class="notification-count">0</span>
+                    <div class="notification-panel" id="notificationPanel"></div>
+                </div>
+
+                <div class="user-profile">
+                    <div class="avatar" id="avatar">U</div>
+                    <div class="user-info">
+                        <div class="user-name" id="userName">-</div>
+                        <div class="user-role" id="userRole">-</div>
+                        <button id="logoutBtn" style="margin-left:10px;padding:6px 10px;border-radius:6px;">Cerrar sesión</button>
+                    </div>
+                </div>
+            </div>
+        </header>
+        
+        <div class="main-content">
+            <div class="sidebar">
+                <ul class="sidebar-menu">
+                    <li>
+                        <i class="fas fa-home"></i>
+                        <span><a href="indexestudiante.html">Inicio</a></span>
+                    </li>
+                    <li class="active">
+                        <i class="fas fa-upload"></i>
+                        <span><a href="proyectosestudiante.html">Proyectos</a></span>
+                    </li>
+                    <li>
+                        <i class="fas fa-calendar-alt"></i>
+                        <span><a href="calendarioestudiante.html">Calendario</a></span>
+                    </li>
+                    <li >
+                        <i class="fas fa-chart-bar"></i>
+                        <span><a href="calificacionesestudiante.html">Calificaciones</a></span>
+                    </li>
+                    <li>
+                        <i class="fas fa-cog"></i>
+                        <span><a href="configuracionedtudiante.html">Configuración</a></span>
+                    </li>
+                </ul>
+            </div>
+            
+            <div class="content">
+                <div class="projects-section">
+                    <div class="section-header">
+                        <h2>Mis Proyectos</h2>
+                    </div>
+                    
+                    <div class="projects-grid" id="projectsContainer">
+                        <div class="loading">
+                            <i class="fas fa-spinner"></i>
+                            <p>Cargando proyectos...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Configuración
+        const API_BASE_URL = '/api';
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            // Elementos del DOM
+            const projectsContainer = document.getElementById('projectsContainer');
+            const userAvatar = document.getElementById('avatar');
+            const userName = document.getElementById('userName');
+            const userRole = document.getElementById('userRole');
+            const logoutBtn = document.getElementById('logoutBtn');
+            
+            // Estado de la aplicación
+            let projects = [];
+            let currentUser = null;
+            
+            // Inicializar la aplicación
+            init();
+            
+            async function init() {
+                await loadCurrentUser();
+                await loadProjects();
+                setupEventListeners();
+            }
+            
+            // Cargar información del usuario actual
+            async function loadCurrentUser() {
+                try {
+                    const response = await fetch('/me', { credentials: 'include' });
+                    if (!response.ok) {
+                        throw new Error('No autenticado');
+                    }
+                    currentUser = await response.json();
+                    updateUserInfo();
+                } catch (error) {
+                    console.error('Error cargando usuario:', error);
+                    window.location.href = '/login.html';
+                }
+            }
+            
+            // Actualizar información del usuario en la interfaz
+            function updateUserInfo() {
+                if (currentUser) {
+                    if (userName) userName.textContent = currentUser.nombre;
+                    if (userRole) userRole.textContent = currentUser.role;
+                    if (userAvatar) {
+                        const firstLetter = (currentUser.nombre || 'U').charAt(0).toUpperCase();
+                        userAvatar.textContent = firstLetter;
+                    }
+                }
+            }
+            
+            // Configurar event listeners
+            function setupEventListeners() {
+                // Cerrar sesión
+                if (logoutBtn) {
+                    logoutBtn.addEventListener('click', async () => {
+                        try {
+                            await fetch('/logout', { 
+                                method: 'POST', 
+                                credentials: 'include' 
+                            });
+                            window.location.href = '/login.html';
+                        } catch (error) {
+                            console.error('Error al cerrar sesión:', error);
+                        }
+                    });
+                }
+            }
+            
+            // Cargar proyectos del estudiante
+            async function loadProjects() {
+                try {
+                    showLoading();
+                    
+                    const response = await fetch(`${API_BASE_URL}/proyectos/estudiante`, {
+                        credentials: 'include'
+                    });
+                    
+                    if (!response.ok) {
+                        throw new Error(`Error ${response.status}: ${response.statusText}`);
+                    }
+                    
+                    projects = await response.json();
+                    renderProjects();
+                    
+                } catch (error) {
+                    console.error('Error al cargar proyectos:', error);
+                    showError('No se pudieron cargar los proyectos. Intenta nuevamente.');
+                    // Mostrar datos de ejemplo en caso de error
+                    projects = getSampleProjects();
+                    renderProjects();
+                }
+            }
+            
+            // Renderizar proyectos en la interfaz
+            function renderProjects() {
+                if (!projectsContainer) return;
+                
+                if (projects.length === 0) {
+                    projectsContainer.innerHTML = `
+                        <div class="empty-state" style="grid-column: 1 / -1;">
+                            <i class="fas fa-folder-open"></i>
+                            <h3>No tienes proyectos asignados</h3>
+                            <p>Los proyectos en los que participes aparecerán aquí</p>
+                        </div>
+                    `;
+                    return;
+                }
+                
+                projectsContainer.innerHTML = '';
+                
+                projects.forEach(project => {
+                    const projectCard = createProjectCard(project);
+                    projectsContainer.appendChild(projectCard);
+                });
+            }
+            
+            // Crear tarjeta de proyecto
+            function createProjectCard(project) {
+                const projectCard = document.createElement('div');
+                projectCard.className = 'project-card';
+                
+                // Determinar el estado del proyecto
+                const today = new Date();
+                const endDate = new Date(project.fecha_fin);
+                const startDate = new Date(project.fecha_inicio);
+                
+                let statusClass = '';
+                let statusText = '';
+                let progress = 0;
+                
+                if (today > endDate) {
+                    statusClass = 'completed';
+                    statusText = 'Completado';
+                    progress = 100;
+                } else if (today >= startDate && today <= endDate) {
+                    statusClass = 'urgent';
+                    statusText = 'En progreso';
+                    // Calcular progreso basado en tiempo
+                    const totalDuration = endDate - startDate;
+                    const elapsed = today - startDate;
+                    progress = Math.min(Math.max((elapsed / totalDuration) * 100, 0), 100);
+                } else {
+                    statusClass = '';
+                    statusText = 'Planificado';
+                    progress = 0;
+                }
+                
+                if (statusClass) {
+                    projectCard.classList.add(statusClass);
+                }
+                
+                // Calcular progreso de entregables
+                const entregablesProgress = project.total_entregables > 0 ? 
+                    (project.entregables_completados / project.total_entregables) * 100 : 0;
+                
+                // Formatear fechas
+                const formattedStartDate = new Date(project.fecha_inicio).toLocaleDateString('es-ES');
+                const formattedEndDate = new Date(project.fecha_fin).toLocaleDateString('es-ES');
+                
+                // Crear avatares de miembros
+                const membersHTML = createMembersHTML(project.integrantes);
+                
+                projectCard.innerHTML = `
+                    <div class="project-header">
+                        <div>
+                            <div class="project-title">${escapeHtml(project.titulo)}</div>
+                            <div class="project-dates">${formattedStartDate} - ${formattedEndDate}</div>
+                        </div>
+                        <div class="project-actions">
+                            <div class="project-btn view-btn" data-id="${project.id}" title="Ver detalles">
+                                <i class="fas fa-eye"></i>
+                            </div>
+                            <div class="project-btn entregables-btn" data-id="${project.id}" title="Entregables">
+                                <i class="fas fa-tasks"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="project-description">${escapeHtml(project.descripcion || 'Sin descripción')}</div>
+                    
+                    <!-- Progreso del proyecto -->
+                    <div style="margin: 15px 0;">
+                        <div class="progress-info">
+                            <span>Progreso del proyecto</span>
+                            <span>${Math.round(progress)}%</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill ${getProgressColor(progress)}" style="width: ${progress}%;"></div>
+                        </div>
+                    </div>
+                    
+                    <!-- Progreso de entregables -->
+                    <div style="margin: 15px 0;">
+                        <div class="progress-info">
+                            <span>Entregables completados</span>
+                            <span>${project.entregables_completados || 0}/${project.total_entregables || 0}</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill success" style="width: ${entregablesProgress}%;"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="project-footer">
+                        <div class="project-members">
+                            ${membersHTML}
+                        </div>
+                        <div class="project-status">
+                            <span class="project-status-badge status-${statusClass.replace('completed', 'completado').replace('urgent', 'en-progreso')}">
+                                ${statusText}
+                            </span>
+                        </div>
+                    </div>
+                `;
+                
+                // Agregar event listeners a los botones
+                const viewBtn = projectCard.querySelector('.view-btn');
+                const entregablesBtn = projectCard.querySelector('.entregables-btn');
+                
+                viewBtn.addEventListener('click', () => viewProjectDetails(project));
+                entregablesBtn.addEventListener('click', () => showEntregables(project));
+                
+                return projectCard;
+            }
+            
+            // Crear HTML para los avatares de miembros
+            function createMembersHTML(integrantes) {
+                if (!integrantes || integrantes.length === 0) {
+                    return '<div style="color: var(--gray); font-size: 14px;">Sin integrantes</div>';
+                }
+                
+                let membersHTML = '';
+                const visibleMembers = integrantes.slice(0, 3);
+                const extraMembers = integrantes.length - 3;
+                
+                visibleMembers.forEach(memberId => {
+                    const initials = `U${memberId}`;
+                    membersHTML += `<div class="member-avatar" title="Usuario ${memberId}">${initials}</div>`;
+                });
+                
+                if (extraMembers > 0) {
+                    membersHTML += `<div class="more-members" title="${extraMembers} integrantes más">+${extraMembers}</div>`;
+                }
+                
+                return membersHTML;
+            }
+            
+            // Ver detalles del proyecto
+            function viewProjectDetails(project) {
+                const modalHTML = `
+                    <div class="modal" id="projectDetailsModal" style="display: flex;">
+                        <div class="modal-content" style="max-width: 600px;">
+                            <span class="close-modal">&times;</span>
+                            
+                            <div class="modal-header">
+                                <h2>${escapeHtml(project.titulo)}</h2>
+                            </div>
+                            
+                            <div class="modal-section">
+                                <p><strong>Descripción:</strong></p>
+                                <p>${escapeHtml(project.descripcion || 'Sin descripción')}</p>
+                            </div>
+                            
+                            <div class="modal-section">
+                                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                                    <div>
+                                        <strong>Fecha de inicio:</strong><br>
+                                        ${new Date(project.fecha_inicio).toLocaleDateString('es-ES')}
+                                    </div>
+                                    <div>
+                                        <strong>Fecha de fin:</strong><br>
+                                        ${new Date(project.fecha_fin).toLocaleDateString('es-ES')}
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="modal-section">
+                                <strong>Estado:</strong> 
+                                <span class="project-status-badge status-${project.estado_actual === 'completado' ? 'completado' : project.estado_actual === 'en_progreso' ? 'en-progreso' : 'planificado'}">
+                                    ${project.estado_actual === 'completado' ? 'Completado' : 
+                                      project.estado_actual === 'en_progreso' ? 'En progreso' : 
+                                      'Planificado'}
+                                </span>
+                            </div>
+                            
+                            <div class="modal-section">
+                                <strong>Integrantes:</strong>
+                                <div class="members-list" style="margin-top: 10px;">
+                                    ${project.integrantes.map(id => 
+                                        `<div class="member-tag">Usuario ${id}</div>`
+                                    ).join('')}
+                                </div>
+                            </div>
+                            
+                            ${project.total_entregables > 0 ? `
+                            <div class="modal-section">
+                                <strong>Progreso de entregables:</strong>
+                                <div style="margin-top: 10px;">
+                                    <div class="progress-info">
+                                        <span>Completados</span>
+                                        <span>${project.entregables_completados || 0}/${project.total_entregables || 0}</span>
+                                    </div>
+                                    <div class="progress-bar">
+                                        <div class="progress-fill success" style="width: ${(project.entregables_completados / project.total_entregables) * 100}%;"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            ` : ''}
+                        </div>
+                    </div>
+                `;
+                
+                document.body.insertAdjacentHTML('beforeend', modalHTML);
+                setupModalEvents('projectDetailsModal');
+            }
+            
+            // Mostrar entregables del proyecto
+            async function showEntregables(project) {
+                try {
+                    const response = await fetch(`${API_BASE_URL}/proyectos/${project.id}/entregables`, {
+                        credentials: 'include'
+                    });
+                    
+                    if (!response.ok) {
+                        throw new Error(`Error ${response.status}: ${response.statusText}`);
+                    }
+                    
+                    const entregables = await response.json();
+                    showEntregablesModal(project, entregables);
+                    
+                } catch (error) {
+                    console.error('Error al cargar entregables:', error);
+                    showError('No se pudieron cargar los entregables.');
+                }
+            }
+            
+            // Mostrar modal de entregables
+            function showEntregablesModal(project, entregables) {
+                const entregablesHTML = entregables.map(entregable => `
+                    <div class="entregable-item ${entregable.estado}" style="position: relative;">
+                        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px;">
+                            <h4 style="margin: 0; flex: 1;">${escapeHtml(entregable.nombre)}</h4>
+                            <span class="status-badge ${entregable.estado}" style="margin-left: 10px;">
+                                ${entregable.estado === 'completado' ? 'Completado' :
+                                  entregable.estado === 'en_progreso' ? 'En progreso' :
+                                  'Pendiente'}
+                            </span>
+                        </div>
+                        
+                        <p style="margin: 0 0 10px 0; color: var(--gray); font-size: 14px;">
+                            ${escapeHtml(entregable.descripcion || 'Sin descripción')}
+                        </p>
+                        
+                        <div style="font-size: 14px; color: var(--gray); margin-bottom: 10px;">
+                            <i class="far fa-calendar"></i> 
+                            <strong>Fecha de entrega:</strong> ${new Date(entregable.fecha_entrega).toLocaleDateString('es-ES')}
+                        </div>
+                        
+                        ${entregable.es_mi_entrega ? `
+                            <div class="alert alert-success">
+                                <i class="fas fa-check-circle"></i> 
+                                <strong>Ya entregaste este entregable</strong>
+                                ${entregable.archivo_url ? `<br><small>Archivo: <a href="${entregable.archivo_url}" target="_blank">Ver entrega</a></small>` : ''}
+                            </div>
+                        ` : entregable.estado === 'pendiente' ? `
+                            <button class="btn btn-primary btn-sm entregar-btn" data-id="${entregable.id_entregable}">
+                                <i class="fas fa-upload"></i> Entregar
+                            </button>
+                        ` : `
+                            <div class="alert alert-info">
+                                <i class="fas fa-info-circle"></i> 
+                                Este entregable está siendo revisado por el docente
+                            </div>
+                        `}
+                    </div>
+                `).join('');
+                
+                const modalHTML = `
+                    <div class="modal" id="entregablesModal" style="display: flex;">
+                        <div class="modal-content" style="max-width: 700px;">
+                            <span class="close-modal">&times;</span>
+                            
+                            <div class="modal-header">
+                                <h2>Entregables - ${escapeHtml(project.titulo)}</h2>
+                            </div>
+                            
+                            <div style="max-height: 400px; overflow-y: auto; padding-right: 10px;">
+                                ${entregables.length > 0 ? entregablesHTML : `
+                                    <div class="empty-state" style="padding: 20px;">
+                                        <i class="fas fa-tasks"></i>
+                                        <p>No hay entregables para este proyecto</p>
+                                    </div>
+                                `}
+                            </div>
+                        </div>
+                    </div>
+                `;
+                
+                document.body.insertAdjacentHTML('beforeend', modalHTML);
+                setupModalEvents('entregablesModal');
+                
+                // Agregar event listeners a los botones de entregar
+                document.querySelectorAll('.entregar-btn').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        const entregableId = this.getAttribute('data-id');
+                        showEntregarModal(entregableId);
+                    });
+                });
+            }
+            
+            // Mostrar modal para entregar
+            function showEntregarModal(entregableId) {
+                const modalHTML = `
+                    <div class="modal" id="entregarModal" style="display: flex;">
+                        <div class="modal-content" style="max-width: 500px;">
+                            <span class="close-modal">&times;</span>
+                            
+                            <div class="modal-header">
+                                <h2>Entregar Trabajo</h2>
+                            </div>
+                            
+                            <form id="entregarForm">
+                                <div class="form-group">
+                                    <label for="archivoUrl">URL del archivo o enlace *</label>
+                                    <input type="url" class="form-control" id="archivoUrl" 
+                                           placeholder="https://drive.google.com/... o https://github.com/..." 
+                                           required>
+                                    <small style="color: var(--gray); margin-top: 5px; display: block;">
+                                        Puedes usar Google Drive, GitHub, Dropbox, o cualquier servicio de almacenamiento en la nube
+                                    </small>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="comentariosEntrega">Comentarios (opcional)</label>
+                                    <textarea class="form-control" id="comentariosEntrega" 
+                                              placeholder="Agrega algún comentario sobre tu entrega..." 
+                                              rows="3"></textarea>
+                                </div>
+                                
+                                <button type="submit" class="btn btn-primary" style="width: 100%;">
+                                    <i class="fas fa-paper-plane"></i> Enviar Entrega
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                `;
+                
+                document.body.insertAdjacentHTML('beforeend', modalHTML);
+                setupModalEvents('entregarModal');
+                
+                // Configurar el formulario de entrega
+                document.getElementById('entregarForm').addEventListener('submit', async (e) => {
+                    e.preventDefault();
+                    await entregarTrabajo(entregableId);
+                });
+            }
+            
+            // Entregar trabajo
+            async function entregarTrabajo(entregableId) {
+                const archivoUrl = document.getElementById('archivoUrl').value;
+                const comentarios = document.getElementById('comentariosEntrega').value;
+                
+                if (!archivoUrl) {
+                    showError('Por favor ingresa la URL del archivo');
+                    return;
+                }
+                
+                try {
+                    const response = await fetch(`${API_BASE_URL}/entregables/${entregableId}/entregar`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        credentials: 'include',
+                        body: JSON.stringify({
+                            archivo_url: archivoUrl,
+                            comentarios: comentarios
+                        })
+                    });
+                    
+                    if (!response.ok) {
+                        throw new Error(`Error ${response.status}: ${response.statusText}`);
+                    }
+                    
+                    // Cerrar modales y recargar
+                    closeAllModals();
+                    await loadProjects();
+                    showToast('¡Entrega completada exitosamente!', 'success');
+                    
+                } catch (error) {
+                    console.error('Error al entregar:', error);
+                    showError('No se pudo completar la entrega. Intenta nuevamente.');
+                }
+            }
+            
+            // Utilidades
+            function setupModalEvents(modalId) {
+                const modal = document.getElementById(modalId);
+                const closeBtn = modal.querySelector('.close-modal');
+                
+                closeBtn.onclick = () => modal.remove();
+                modal.onclick = (e) => {
+                    if (e.target === modal) modal.remove();
+                };
+            }
+            
+            function closeAllModals() {
+                document.querySelectorAll('.modal').forEach(modal => modal.remove());
+            }
+            
+            function showLoading() {
+                if (projectsContainer) {
+                    projectsContainer.innerHTML = `
+                        <div class="loading" style="grid-column: 1 / -1;">
+                            <i class="fas fa-spinner"></i>
+                            <p>Cargando proyectos...</p>
+                        </div>
+                    `;
+                }
+            }
+            
+            function showError(message) {
+                showToast(message, 'error');
+            }
+            
+            function showToast(message, type = 'info') {
+                const toast = document.createElement('div');
+                toast.style.cssText = `
+                    position: fixed;
+                    top: 20px;
+                    right: 20px;
+                    padding: 15px 20px;
+                    border-radius: 8px;
+                    color: white;
+                    font-weight: 500;
+                    z-index: 10000;
+                    max-width: 300px;
+                    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+                    animation: slideInRight 0.3s ease;
+                `;
+                
+                if (type === 'success') {
+                    toast.style.background = 'var(--success)';
+                } else if (type === 'error') {
+                    toast.style.background = 'var(--danger)';
+                } else if (type === 'warning') {
+                    toast.style.background = 'var(--warning)';
+                    toast.style.color = 'var(--dark)';
+                } else {
+                    toast.style.background = 'var(--info)';
+                }
+                
+                toast.textContent = message;
+                document.body.appendChild(toast);
+                
+                setTimeout(() => {
+                    toast.style.animation = 'slideOutRight 0.3s ease';
+                    setTimeout(() => {
+                        if (toast.parentNode) {
+                            toast.parentNode.removeChild(toast);
+                        }
+                    }, 300);
+                }, 4000);
+            }
+            
+            function escapeHtml(text) {
+                const div = document.createElement('div');
+                div.textContent = text;
+                return div.innerHTML;
+            }
+            
+            function getProgressColor(progress) {
+                if (progress >= 80) return 'success';
+                if (progress >= 50) return 'warning';
+                return 'danger';
+            }
+            
+            // Datos de ejemplo para cuando la API falle
+            function getSampleProjects() {
+                return [
+                    {
+                        id: 1,
+                        titulo: "Sistema de Gestión Académica",
+                        descripcion: "Desarrollo de una plataforma para gestionar notas y estudiantes",
+                        fecha_inicio: "2025-01-15",
+                        fecha_fin: "2025-05-30",
+                        integrantes: [16, 2, 3],
+                        estado: "activo",
+                        estado_actual: "en_progreso",
+                        total_entregables: 3,
+                        entregables_completados: 1
+                    },
+                    {
+                        id: 2,
+                        titulo: "App de Tareas Colaborativas",
+                        descripcion: "Aplicación web para asignación y seguimiento de tareas de equipo",
+                        fecha_inicio: "2025-03-01",
+                        fecha_fin: "2025-07-15",
+                        integrantes: [16, 5, 6],
+                        estado: "activo",
+                        estado_actual: "en_progreso",
+                        total_entregables: 5,
+                        entregables_completados: 2
+                    }
+                ];
+            }
+            
+            // Agregar estilos de animación para toast
+            if (!document.querySelector('#toast-styles')) {
+                const styles = document.createElement('style');
+                styles.id = 'toast-styles';
+                styles.textContent = `
+                    @keyframes slideInRight {
+                        from { transform: translateX(100%); opacity: 0; }
+                        to { transform: translateX(0); opacity: 1; }
+                    }
+                    @keyframes slideOutRight {
+                        from { transform: translateX(0); opacity: 1; }
+                        to { transform: translateX(100%); opacity: 0; }
+                    }
+                `;
+                document.head.appendChild(styles);
+            }
+        });
+    </script>
+</body>
+</html>

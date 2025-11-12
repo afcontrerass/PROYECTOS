@@ -1,0 +1,112 @@
+// dashboard.js - Funcionalidad para actualizar los cards del dashboard
+class DashboardManager {
+    constructor() {
+        this.stats = {
+            tareasPendientes: 0,
+            alumnosInscritos: 0,
+            proyectosCurso: 0
+        };
+    }
+
+    async loadDashboardData() {
+        try {
+            console.log('📊 Cargando datos del dashboard...');
+            
+            // Cargar estadísticas de tareas
+            await this.loadTaskStats();
+            
+            // Cargar estadísticas de proyectos
+            await this.loadProjectStats();
+            
+            // Actualizar la UI
+            this.updateDashboardCards();
+            
+        } catch (error) {
+            console.error('❌ Error cargando datos del dashboard:', error);
+        }
+    }
+
+    async loadTaskStats() {
+        try {
+            const response = await fetch('/api/tareas');
+            if (!response.ok) throw new Error('Error al obtener tareas');
+            
+            const tareas = await response.json();
+            
+            // Contar tareas por estado
+            this.stats.tareasPendientes = tareas.filter(t => 
+                t.estado === 'pendiente' || t.estado === 'urgente'
+            ).length;
+            
+            console.log(`✅ Tareas cargadas: ${tareas.length}, Pendientes: ${this.stats.tareasPendientes}`);
+            
+        } catch (error) {
+            console.error('❌ Error cargando estadísticas de tareas:', error);
+            this.stats.tareasPendientes = 0;
+        }
+    }
+
+    async loadProjectStats() {
+        try {
+            const response = await fetch('/api/proyectos');
+            if (!response.ok) throw new Error('Error al obtener proyectos');
+            
+            const proyectos = await response.json();
+            
+            // Contar proyectos activos
+            this.stats.proyectosCurso = proyectos.filter(p => 
+                p.estado === 'activo'
+            ).length;
+            
+            // Para alumnos inscritos, podrías tener una API específica
+            // Por ahora usamos un valor por defecto o de sesión
+            this.stats.alumnosInscritos = await this.getStudentCount();
+            
+            console.log(`✅ Proyectos cargados: ${proyectos.length}, Activos: ${this.stats.proyectosCurso}`);
+            
+        } catch (error) {
+            console.error('❌ Error cargando estadísticas de proyectos:', error);
+            this.stats.proyectosCurso = 0;
+            this.stats.alumnosInscritos = 0;
+        }
+    }
+
+    async getStudentCount() {
+        try {
+            // Esta sería una API específica para contar estudiantes
+            // Por ahora retornamos un valor por defecto
+            return 120; // Puedes implementar la lógica real aquí
+        } catch (error) {
+            console.error('Error obteniendo conteo de estudiantes:', error);
+            return 0;
+        }
+    }
+
+    updateDashboardCards() {
+        // Actualizar el card de tareas por calificar
+        const tareasCard = document.querySelector('.card:nth-child(1) .card-value');
+        if (tareasCard) {
+            tareasCard.textContent = this.stats.tareasPendientes;
+        }
+
+        // Actualizar el card de alumnos inscritos
+        const alumnosCard = document.querySelector('.card:nth-child(2) .card-value');
+        if (alumnosCard) {
+            alumnosCard.textContent = this.stats.alumnosInscritos;
+        }
+
+        // Actualizar el card de proyectos en curso
+        const proyectosCard = document.querySelector('.card:nth-child(3) .card-value');
+        if (proyectosCard) {
+            proyectosCard.textContent = this.stats.proyectosCurso;
+        }
+
+        console.log('📈 Dashboard actualizado:', this.stats);
+    }
+}
+
+// Inicializar dashboard cuando la página cargue
+document.addEventListener('DOMContentLoaded', function() {
+    const dashboard = new DashboardManager();
+    dashboard.loadDashboardData();
+});
